@@ -1,67 +1,37 @@
+var createPool = require("create_pool");
+
+
 module.exports = Queue;
 
 
 function Queue() {
     this.__callbacks = [];
-    this.__contexts = [];
 }
 
-Queue.prototype.enqueue = function(callback, context) {
-    var contexts = this.__contexts,
-        callbacks = this.__callbacks;
+createPool(Queue);
 
+Queue.prototype.enqueue = function(callback) {
+    var callbacks = this.__callbacks;
     callbacks[callbacks.length] = callback;
-    contexts[contexts.length] = context;
-
     return this;
 };
 
-Queue.prototype.notifyAll = function(callback) {
-    var contexts = this.__contexts,
-        callbacks = this.__callbacks,
-        index = 0,
-        length = callbacks.length,
-        called = false;
+Queue.prototype.notifyAll = function() {
+    var callbacks = this.__callbacks,
+        i = -1,
+        il = callbacks.length - 1;
 
-    function done(err) {
-        contexts.length = 0;
-        callbacks.length = 0;
-        callback(err);
+    while (i++ < il) {
+        callbacks[i]();
     }
-
-    (function next(err) {
-        var fn, i;
-
-        if (called === true) {
-            return;
-        }
-
-        if (err || index === length) {
-            called = true;
-            done(err);
-            return;
-        }
-
-        i = index;
-        fn = callbacks[i];
-
-        index += 1;
-
-        if (fn.length !== 0) {
-            fn.call(contexts[i], next);
-        } else {
-            fn.call(contexts[i]);
-            next();
-        }
-    }());
+    callbacks.length = 0;
 
     return this;
 };
 
-Queue.prototype.reset = function() {
-
+Queue.prototype.destructor = function() {
     this.__callbacks.length = 0;
-    this.__contexts.length = 0;
-
     return this;
 };
+
+Queue.prototype.reset = Queue.prototype.destructor;

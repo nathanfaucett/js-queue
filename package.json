@@ -19,5 +19,8 @@
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-jsbeautifier": "^0.2.7",
     "mocha": "^2.1.0"
+  },
+  "dependencies": {
+    "create_pool": "git://github.com/nathanfaucett/create_pool"
   }
 }

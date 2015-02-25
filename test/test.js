@@ -3,22 +3,22 @@ var assert = require("assert"),
 
 
 describe("Queue", function() {
-    it("should enqueue callbacks and call all in order when notifyAll(callback) is called", function(done) {
-        var queue = new Queue();
+    it("should enqueue callbacks and call all in order when notifyAll() is called", function() {
+        var queue = Queue.getPooled(),
+            called0 = false,
+            called1 = false;
 
-        queue.enqueue(function(next) {
-            assert.equal(this.key, "value");
-            next();
-        }, {
-            key: "value"
+        queue.enqueue(function() {
+            called0 = true;
         });
 
         queue.enqueue(function() {
-            assert.equal(this.key, "value");
-        }, {
-            key: "value"
+            called1 = true;
         });
 
-        queue.notifyAll(done);
+        queue.notifyAll();
+
+        assert(called0 === true);
+        assert(called1 === true);
     });
 });
