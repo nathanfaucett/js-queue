@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/queue",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "create a Queue for callbacks and call them all in order",
   "repository": {
     "type": "git",
@@ -29,6 +29,6 @@
     "zuul": "^3.6.0"
   },
   "dependencies": {
-    "@nathanfaucett/create_pool": "^0.0.1"
+    "@nathanfaucett/create_pool": "^0.0.3"
   }
 }
